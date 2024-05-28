@@ -7,5 +7,20 @@
 - запросить информацию о книге
 - запросить информацию о всех книгах
 
+Использование:
+
+```
+curl -X GET localhost:8000/books
+
+curl -X GET localhost:8000/books/1
+
+curl -X POST localhost:8000/books --data '{"ID":1,"Title":"Mybook1","Author":"Author1","Year":"2021"}'
+
+curl -X PUT localhost:8000/books --data '{"ID":1,"Title":"Mybook1","Author":"Author2","Year":"2022"}'
+
+curl -X DELETE localhost:8000/books/1
+```
+
+
 Notes:
  Standard Go Layout: https://github.com/golang-standards/project-layout/
