@@ -6,8 +6,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"bookinfo/cmd/controllers"
-	"bookinfo/cmd/driver"
+	"bookinfo/controllers"
+	"bookinfo/storage/db"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 
 	controller := controllers.Controller{}
 
-	collection := driver.Connect()
+	collection := db.Connect()
 
 	router.HandleFunc("/books", controller.GetBooks(collection)).Methods("GET")
 	router.HandleFunc("/books/{id}", controller.GetBook(collection)).Methods("GET")

@@ -1,4 +1,4 @@
-package repository
+package db
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"bookinfo/cmd/models"
+	"bookinfo/models"
 )
 
-type BookRepository struct{}
+type BookDB struct{}
 
-func (b BookRepository) GetBooks(collection *mongo.Collection, book models.Book, books []models.Book) []models.Book {
+func (b BookDB) GetBooks(collection *mongo.Collection, book models.Book, books []models.Book) []models.Book {
 	ctx := context.TODO()
 
 	cursor, err := collection.Find(ctx, bson.M{})
@@ -31,7 +31,7 @@ func (b BookRepository) GetBooks(collection *mongo.Collection, book models.Book,
 	return books
 }
 
-func (b BookRepository) GetBook(collection *mongo.Collection, book models.Book, id int) models.Book {
+func (b BookDB) GetBook(collection *mongo.Collection, book models.Book, id int) models.Book {
 	filter := bson.D{{"id", id}}
 
 	err := collection.FindOne(context.TODO(), filter).Decode(&book)
@@ -42,7 +42,7 @@ func (b BookRepository) GetBook(collection *mongo.Collection, book models.Book, 
 	return book
 }
 
-func (b BookRepository) AddBook(collection *mongo.Collection, book models.Book) string {
+func (b BookDB) AddBook(collection *mongo.Collection, book models.Book) string {
 	insertResult, err := collection.InsertOne(context.TODO(), book)
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func (b BookRepository) AddBook(collection *mongo.Collection, book models.Book) 
 	return fmt.Sprintf("%v", insertResult.InsertedID)
 }
 
-func (b BookRepository) UpdateBook(collection *mongo.Collection, book models.Book) string {
+func (b BookDB) UpdateBook(collection *mongo.Collection, book models.Book) string {
 	filter := bson.D{{"id", book.ID}}
 	update := bson.D{{"$set", bson.D{{"title", book.Title}, {"author", book.Author}, {"year", book.Year}}}}
 
@@ -61,7 +61,7 @@ func (b BookRepository) UpdateBook(collection *mongo.Collection, book models.Boo
 	return fmt.Sprintf("%v", updateResult)
 }
 
-func (b BookRepository) RemoveBook(collection *mongo.Collection, id int) string {
+func (b BookDB) RemoveBook(collection *mongo.Collection, id int) string {
 	filter := bson.D{{"id", id}}
 	delResult, err := collection.DeleteOne(context.TODO(), filter)
 	if err != nil {

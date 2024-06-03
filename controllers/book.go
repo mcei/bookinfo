@@ -9,15 +9,15 @@ import (
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"bookinfo/cmd/models"
-	"bookinfo/cmd/repository"
+	"bookinfo/models"
+	"bookinfo/storage/db"
 )
 
 type Controller struct{}
 
 var books []models.Book
 
-var bookRepo = repository.BookRepository{}
+var bookRepo = db.BookDB{}
 
 func (c Controller) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
