@@ -23,4 +23,7 @@ curl -X DELETE localhost:8000/books/1
 
 
 Notes:
- Standard Go Layout: https://github.com/golang-standards/project-layout/
+
+- Standard Go Layout: https://github.com/golang-standards/project-layout/
+- Another example: https://github.com/herryg91/go-clean-architecture/tree/main/examples/book-rest-api
+- https://github.com/herryg91/go-clean-architecture/blob/main/README.md#folder-structure
