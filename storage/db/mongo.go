@@ -14,7 +14,7 @@ import (
 type BookDB struct{}
 
 func (b BookDB) GetBooks(collection *mongo.Collection, book models.Book, books []models.Book) []models.Book {
-	ctx := context.TODO()
+	ctx := context.Background()
 
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
@@ -34,7 +34,7 @@ func (b BookDB) GetBooks(collection *mongo.Collection, book models.Book, books [
 func (b BookDB) GetBook(collection *mongo.Collection, book models.Book, id int) models.Book {
 	filter := bson.D{{"id", id}}
 
-	err := collection.FindOne(context.TODO(), filter).Decode(&book)
+	err := collection.FindOne(context.Background(), filter).Decode(&book)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func (b BookDB) GetBook(collection *mongo.Collection, book models.Book, id int) 
 }
 
 func (b BookDB) AddBook(collection *mongo.Collection, book models.Book) string {
-	insertResult, err := collection.InsertOne(context.TODO(), book)
+	insertResult, err := collection.InsertOne(context.Background(), book)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,7 +54,7 @@ func (b BookDB) UpdateBook(collection *mongo.Collection, book models.Book) strin
 	filter := bson.D{{"id", book.ID}}
 	update := bson.D{{"$set", bson.D{{"title", book.Title}, {"author", book.Author}, {"year", book.Year}}}}
 
-	updateResult, err := collection.UpdateOne(context.TODO(), filter, update)
+	updateResult, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -63,7 +63,7 @@ func (b BookDB) UpdateBook(collection *mongo.Collection, book models.Book) strin
 
 func (b BookDB) RemoveBook(collection *mongo.Collection, id int) string {
 	filter := bson.D{{"id", id}}
-	delResult, err := collection.DeleteOne(context.TODO(), filter)
+	delResult, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
 		log.Fatal(err)
 	}

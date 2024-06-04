@@ -1,4 +1,4 @@
-package controllers
+package rest
 
 import (
 	"encoding/json"
@@ -13,13 +13,13 @@ import (
 	"bookinfo/storage/db"
 )
 
-type Controller struct{}
+type Handler struct{}
 
 var books []models.Book
 
 var bookRepo = db.BookDB{}
 
-func (c Controller) GetBooks(collection *mongo.Collection) http.HandlerFunc {
+func (h Handler) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var book models.Book
 
@@ -30,7 +30,7 @@ func (c Controller) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 	}
 }
 
-func (c Controller) GetBook(collection *mongo.Collection) http.HandlerFunc {
+func (h Handler) GetBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var book models.Book
 
@@ -42,7 +42,7 @@ func (c Controller) GetBook(collection *mongo.Collection) http.HandlerFunc {
 	}
 }
 
-func (c Controller) AddBook(collection *mongo.Collection) http.HandlerFunc {
+func (h Handler) AddBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var book models.Book
 		_ = json.NewDecoder(r.Body).Decode(&book)
@@ -52,7 +52,7 @@ func (c Controller) AddBook(collection *mongo.Collection) http.HandlerFunc {
 	}
 }
 
-func (c Controller) UpdateBook(collection *mongo.Collection) http.HandlerFunc {
+func (h Handler) UpdateBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var book models.Book
 		_ = json.NewDecoder(r.Body).Decode(&book)
@@ -62,7 +62,7 @@ func (c Controller) UpdateBook(collection *mongo.Collection) http.HandlerFunc {
 	}
 }
 
-func (c Controller) RemoveBook(collection *mongo.Collection) http.HandlerFunc {
+func (h Handler) RemoveBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		book_id, _ := strconv.Atoi(params["id"])
