@@ -10,5 +10,6 @@ type GetUseCase interface {
 
 func (uc *UseCase) Get(id int) (*entity.Book, error) {
 	b := uc.repo.GetBook(nil, entity.Book{}, id)
+	// TODO handle errors
 	return &b, nil
 }
