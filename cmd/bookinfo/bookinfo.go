@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"bookinfo/cmd/rest"
-	"bookinfo/storage/db"
+	"bookinfo/storage"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 
 	handler := rest.Handler{}
 
-	collection := db.Connect()
+	collection := storage.Connect()
 
 	router.HandleFunc("/books", handler.GetBooks(collection)).Methods("GET")
 	router.HandleFunc("/books/{id}", handler.GetBook(collection)).Methods("GET")

@@ -9,21 +9,21 @@ import (
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"bookinfo/entity"
-	"bookinfo/storage/db"
+	"bookinfo/domain/book"
+	"bookinfo/storage"
 )
 
 type Handler struct{}
 
-var books []entity.Book
+var books []book.Book
 
-var bookRepo = db.BookDB{}
+var bookRepo = storage.BookDB{}
 
 func (h Handler) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book entity.Book
+		var book book.Book
 
-		books = bookRepo.GetBooks(collection, book, []entity.Book{})
+		books = bookRepo.GetBooks(collection, book, []book.Book{})
 
 		//fmt.Println(r.Header.Get("User-Agent"))
 		json.NewEncoder(w).Encode(books)
@@ -32,7 +32,7 @@ func (h Handler) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 
 func (h Handler) GetBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book entity.Book
+		var book book.Book
 
 		params := mux.Vars(r)
 		id, _ := strconv.Atoi(params["id"])
@@ -44,7 +44,7 @@ func (h Handler) GetBook(collection *mongo.Collection) http.HandlerFunc {
 
 func (h Handler) AddBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book entity.Book
+		var book book.Book
 		_ = json.NewDecoder(r.Body).Decode(&book)
 
 		id := bookRepo.AddBook(collection, book)
@@ -54,7 +54,7 @@ func (h Handler) AddBook(collection *mongo.Collection) http.HandlerFunc {
 
 func (h Handler) UpdateBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book entity.Book
+		var book book.Book
 		_ = json.NewDecoder(r.Body).Decode(&book)
 
 		updateResult := bookRepo.UpdateBook(collection, book)
