@@ -21,9 +21,9 @@ var bookRepo = storage.BookDB{}
 
 func (h Handler) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book book.Book
+		var b book.Book
 
-		books = bookRepo.GetBooks(collection, book, []book.Book{})
+		books = bookRepo.GetBooks(collection, b, []book.Book{})
 
 		//fmt.Println(r.Header.Get("User-Agent"))
 		json.NewEncoder(w).Encode(books)
@@ -32,32 +32,32 @@ func (h Handler) GetBooks(collection *mongo.Collection) http.HandlerFunc {
 
 func (h Handler) GetBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book book.Book
+		var b book.Book
 
 		params := mux.Vars(r)
 		id, _ := strconv.Atoi(params["id"])
 
-		book = bookRepo.GetBook(collection, book, id)
-		json.NewEncoder(w).Encode(book)
+		b = bookRepo.GetBook(collection, b, id)
+		json.NewEncoder(w).Encode(b)
 	}
 }
 
 func (h Handler) AddBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book book.Book
-		_ = json.NewDecoder(r.Body).Decode(&book)
+		var b book.Book
+		_ = json.NewDecoder(r.Body).Decode(&b)
 
-		id := bookRepo.AddBook(collection, book)
+		id := bookRepo.AddBook(collection, b)
 		json.NewEncoder(w).Encode(fmt.Sprintf("Inserted a single document: %v ", id))
 	}
 }
 
 func (h Handler) UpdateBook(collection *mongo.Collection) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var book book.Book
-		_ = json.NewDecoder(r.Body).Decode(&book)
+		var b book.Book
+		_ = json.NewDecoder(r.Body).Decode(&b)
 
-		updateResult := bookRepo.UpdateBook(collection, book)
+		updateResult := bookRepo.UpdateBook(collection, b)
 		json.NewEncoder(w).Encode(updateResult)
 	}
 }
