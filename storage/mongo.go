@@ -1,4 +1,4 @@
-package db
+package storage
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"bookinfo/entity"
+	"bookinfo/domain/book"
 )
 
 type BookDB struct{}
 
-func (b BookDB) GetBooks(collection *mongo.Collection, book entity.Book, books []entity.Book) []entity.Book {
+func (b BookDB) GetBooks(collection *mongo.Collection, book book.Book, books []book.Book) []book.Book {
 	ctx := context.Background()
 
 	cursor, err := collection.Find(ctx, bson.M{})
@@ -31,7 +31,7 @@ func (b BookDB) GetBooks(collection *mongo.Collection, book entity.Book, books [
 	return books
 }
 
-func (b BookDB) GetBook(collection *mongo.Collection, book entity.Book, id int) entity.Book {
+func (b BookDB) GetBook(collection *mongo.Collection, book book.Book, id int) book.Book {
 	filter := bson.D{{"id", id}}
 
 	err := collection.FindOne(context.Background(), filter).Decode(&book)
@@ -42,7 +42,7 @@ func (b BookDB) GetBook(collection *mongo.Collection, book entity.Book, id int) 
 	return book
 }
 
-func (b BookDB) AddBook(collection *mongo.Collection, book entity.Book) string {
+func (b BookDB) AddBook(collection *mongo.Collection, book book.Book) string {
 	insertResult, err := collection.InsertOne(context.Background(), book)
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func (b BookDB) AddBook(collection *mongo.Collection, book entity.Book) string {
 	return fmt.Sprintf("%v", insertResult.InsertedID)
 }
 
-func (b BookDB) UpdateBook(collection *mongo.Collection, book entity.Book) string {
+func (b BookDB) UpdateBook(collection *mongo.Collection, book book.Book) string {
 	filter := bson.D{{"id", book.ID}}
 	update := bson.D{{"$set", bson.D{{"title", book.Title}, {"author", book.Author}, {"year", book.Year}}}}
 
