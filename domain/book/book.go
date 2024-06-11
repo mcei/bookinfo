@@ -1,6 +1,8 @@
 package book
 
-import domain "bookinfo/domain/user"
+import "context"
+
+// как передавать контекст из мейн?
 
 type Book struct {
 	ID     int    `json:"id"`
@@ -13,18 +15,16 @@ type GetUseCase interface {
 	Get(id int) (*Book, error)
 }
 
-func (uc *domain.UseCase) Get(id int) (*Book, error) {
-	b := uc.repo.GetBook(nil, Book{}, id)
-	// TODO handle errors
-	return &b, nil
+func (uc *UseCase) Get(id int) (*Book, error) {
+	b, err := uc.repo.GetBook(context.Background(), nil, Book{}, id)
+	return &b, err
 }
 
 type AddUseCase interface {
 	Add(id int) (*Book, error)
 }
 
-func (uc *domain.UseCase) Add(b Book) (*Book, error) {
-	uc.repo.AddBook(nil, b)
-	// TODO handle errors
-	return nil, nil
+func (uc *UseCase) Add(b Book) (*Book, error) {
+	_, err := uc.repo.AddBook(context.Background(), nil, b)
+	return &b, err
 }
