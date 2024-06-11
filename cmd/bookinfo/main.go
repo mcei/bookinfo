@@ -1,27 +1,26 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 
 	"bookinfo/cmd/rest"
-	"bookinfo/storage"
 )
 
 func main() {
 	router := mux.NewRouter()
+	handler := rest.NewHandler()
+	ctx := context.Background()
 
-	handler := rest.Handler{}
-
-	collection := storage.Connect()
-
-	router.HandleFunc("/books", handler.GetBooks(collection)).Methods("GET")
-	router.HandleFunc("/books/{id}", handler.GetBook(collection)).Methods("GET")
-	router.HandleFunc("/books", handler.AddBook(collection)).Methods("POST")
-	router.HandleFunc("/books", handler.UpdateBook(collection)).Methods("PUT")
-	router.HandleFunc("/books/{id}", handler.RemoveBook(collection)).Methods("DELETE")
+	// Как здесь использовать функцию? "сразу методы объекта в маршрутизатор привязывать"
+	router.HandleFunc("/books", handler.GetBooks(ctx)).Methods("GET")
+	router.HandleFunc("/books/{id}", handler.GetBook(ctx)).Methods("GET")
+	router.HandleFunc("/books", handler.AddBook(ctx)).Methods("POST")
+	router.HandleFunc("/books", handler.UpdateBook(ctx)).Methods("PUT")
+	router.HandleFunc("/books/{id}", handler.RemoveBook(ctx)).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
